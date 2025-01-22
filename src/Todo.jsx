@@ -1,17 +1,30 @@
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Todo(){
     // const tasks = ["Cooking","Cleaning ","Eating","Task 4"]
-    const[tasks,setTasks] = useState(["Cooking","Cleaning ","Eating","Task 4"])
+    const[tasks,setTasks] = useState([])
+    const[btnClicked,setbtnClicked] = useState(false)
+
+    console.log("Entered Todo Component")
+
+    useEffect(()=>{
+    fetch("http://localhost:3000/todos")
+     .then((response)=>response.json())
+     .then((response2)=>setTasks(response2))
+    },[btnClicked])
+
+    
+
+    
 
     const taskList = tasks.map(taskShower)
     // const taskList = tasks.map(item=><TodoItem taskItem={item} />)
 
     function taskShower(currItem,currIndex){
         // console.log(currItem)
-        return <TodoItem taskItem={currItem} onDelete={handleDeleteTask}/>
+        return <TodoItem key={currIndex} taskItem={currItem.item} onDelete={handleDeleteTask}/>
     }
 
     function handleDeleteTask(childData){
@@ -36,6 +49,7 @@ function Todo(){
 
     return(
         <>
+        <button onClick={()=>setbtnClicked(!btnClicked)}>Get Todos</button>
         <h1>This is the Todo Component</h1>
         {taskList}
         <TodoForm addTask={handleAddTask}/>
