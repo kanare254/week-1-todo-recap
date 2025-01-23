@@ -49,9 +49,6 @@ function Todo() {
     const updatedTasks = tasks.map((task) =>
       task.id === taskItem.id ? { ...task, item: newValue } : task
     );
-    if (newValue === "") {
-        return null;
-    } else {
     setTasks(updatedTasks);
     fetch(`http://localhost:3000/todos/${taskItem.id}`, {
       method: "PUT",
@@ -59,7 +56,7 @@ function Todo() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ ...taskItem, item: newValue }),
-    })};
+    });
   }
 
   return (
