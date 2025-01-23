@@ -50,7 +50,7 @@ function Todo() {
       task.id === taskItem.id ? { ...task, item: newValue } : task
     );
     if (newValue === "") {
-      alert("Task is empty, Can't be submitted");
+        alert("Task is empty, Can't be submitted");
     } else {
     setTasks(updatedTasks);
     fetch(`http://localhost:3000/todos/${taskItem.id}`, {

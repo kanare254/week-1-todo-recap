@@ -28,19 +28,6 @@ function TodoForm({addTask}){
 
         }       
     }
-    function handleUpdateTask(taskItem, newValue) {
-        const updatedTasks = tasks.map((task) =>
-          task.id === taskItem.id ? { ...task, item: newValue } : task
-        )
-        setTasks(updatedTasks)
-        fetch(`http://localhost:3000/todos/${taskItem.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ...taskItem, item: newValue }),
-        })
-      }
     
     return(
         <>
