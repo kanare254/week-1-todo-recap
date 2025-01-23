@@ -49,6 +49,9 @@ function Todo() {
     const updatedTasks = tasks.map((task) =>
       task.id === taskItem.id ? { ...task, item: newValue } : task
     );
+    if (newValue === "") {
+      alert("Task is empty, Can't be submitted");
+    } else {
     setTasks(updatedTasks);
     fetch(`http://localhost:3000/todos/${taskItem.id}`, {
       method: "PUT",
@@ -56,7 +59,7 @@ function Todo() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ ...taskItem, item: newValue }),
-    });
+    })};
   }
 
   return (
@@ -70,4 +73,3 @@ function Todo() {
 }
 
 export default Todo;
-
