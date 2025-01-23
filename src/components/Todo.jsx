@@ -1,5 +1,5 @@
-import TodoItem from "./TodoItem";
-import TodoForm from "./TodoForm";
+import TodoItem from "../components/TodoItem";
+import TodoForm from "../components/TodoForm";
 import { useState, useEffect } from "react";
 
 function Todo() {
@@ -50,7 +50,7 @@ function Todo() {
       task.id === taskItem.id ? { ...task, item: newValue } : task
     );
     if (newValue === "") {
-        alert("Task is empty, Can't be submitted");
+        return null;
     } else {
     setTasks(updatedTasks);
     fetch(`http://localhost:3000/todos/${taskItem.id}`, {
