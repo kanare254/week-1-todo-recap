@@ -23,5 +23,5 @@ function TodoItem({taskItem, onDelete ,onUpdate}) {
   )
 }
 
-export default TodoItem
+export default TodoItem;
 

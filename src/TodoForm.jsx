@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 
-function TodoForm({addTask}){ //where addTask is assigned to a function in the parent component, whose role is to add this new task to the existing tasks array
+function TodoForm({addTask}){
     const [newTask, setNewTask] = useState("")
     const[errorMessage,setErrorMessage] = useState("")
 
@@ -42,7 +42,6 @@ function TodoForm({addTask}){ //where addTask is assigned to a function in the p
         })
       }
     
-    // eventlistener is associated with an event handler which will be invoked, everytime, an event is detected
     return(
         <>
         <h1>This is the TodoForm Component</h1>
@@ -55,4 +54,4 @@ function TodoForm({addTask}){ //where addTask is assigned to a function in the p
         </>
     )
 }
-export default TodoForm
+export default TodoForm;
