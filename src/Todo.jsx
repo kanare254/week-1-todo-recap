@@ -2,59 +2,71 @@ import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
 import { useState, useEffect } from "react";
 
-function Todo(){
-    // const tasks = ["Cooking","Cleaning ","Eating","Task 4"]
-    const[tasks,setTasks] = useState([])
-    const[btnClicked,setbtnClicked] = useState(false)
+function Todo() {
+  const [tasks, setTasks] = useState([]);
+  const [btnClicked, setbtnClicked] = useState(false);
 
-    console.log("Entered Todo Component")
-
-    useEffect(()=>{
+  useEffect(() => {
     fetch("http://localhost:3000/todos")
-     .then((response)=>response.json())
-     .then((response2)=>setTasks(response2))
-    },[btnClicked])
+      .then((response) => response.json())
+      .then((response2) => setTasks(response2));
+  }, [btnClicked]);
 
-    
+  const taskList = tasks.map(taskShower);
 
-    
+  function taskShower(currItem, currIndex) {
+    return (
+      <TodoItem
+        key={currIndex}
+        taskItem={currItem}
+        onDelete={handleDeleteTask}
+        onUpdate={handleUpdateTask}
+      />
+    );
+  }
 
-    const taskList = tasks.map(taskShower)
-    // const taskList = tasks.map(item=><TodoItem taskItem={item} />)
+  function handleDeleteTask(childData) {
+    let newItems = tasks.filter((item) => item.id !== childData.id);
+    setTasks(newItems);
+    fetch(`http://localhost:3000/todos/${childData.id}`, {
+      method: "DELETE",
+    });
+  }
 
-    function taskShower(currItem,currIndex){
-        // console.log(currItem)
-        return <TodoItem key={currIndex} taskItem={currItem.item} onDelete={handleDeleteTask}/>
-    }
+  function handleAddTask(newTask) {
+    const newTaskObject = { id: Date.now(), item: newTask.item };
+    setTasks([...tasks, newTaskObject]);
+    fetch("http://localhost:3000/todos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTaskObject),
+    });
+  }
 
-    function handleDeleteTask(childData){
-        // remove a task from the tasks array
-        // this task will be passed from the child
-        console.log(childData)
-        // write functionality to remove this task
-        let newItems = tasks.filter(filterFn)
-        function filterFn(item){
-            return item !== childData
-        }
-        console.log(newItems)
-        setTasks(newItems)
-        
-    }
+  function handleUpdateTask(taskItem, newValue) {
+    const updatedTasks = tasks.map((task) =>
+      task.id === taskItem.id ? { ...task, item: newValue } : task
+    );
+    setTasks(updatedTasks);
+    fetch(`http://localhost:3000/todos/${taskItem.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...taskItem, item: newValue }),
+    });
+  }
 
-    // add function handleAddTask whose responsibility is to add this new task from the task form component to the existing tasks array
-    function handleAddTask(newTask){
-        setTasks([...tasks,newTask])
-    }
-
-
-    return(
-        <>
-        <button onClick={()=>setbtnClicked(!btnClicked)}>Get Todos</button>
-        <h1>This is the Todo Component</h1>
-        {taskList}
-        <TodoForm addTask={handleAddTask}/>
-        </>
-    )
+  return (
+    <>
+      <button onClick={() => setbtnClicked(!btnClicked)}>Get Todos</button>
+      <h1>This is the Todo Component</h1>
+      {taskList}
+      <TodoForm addTask={handleAddTask} />
+    </>
+  );
 }
 
 export default Todo;
